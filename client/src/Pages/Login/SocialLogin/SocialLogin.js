@@ -22,7 +22,7 @@ const SocialLogin = () => {
         errorElement = <p className='text-danger'>Error: {error?.message} {error1?.message}</p>
     }
 
-    if (user || user1) {
+    if (user || user1)  {
         navigate('/home');
     }
 
