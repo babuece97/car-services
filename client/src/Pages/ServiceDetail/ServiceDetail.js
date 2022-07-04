@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import useServiceDetail from '../../Hooks/useServiceDetail';
 import Home from '../Home/Home/Home';
 
 const ServiceDetail = () => {
     const { serviceId } = useParams();
-    const [service, setService]=useState({});
-    useEffect(()=>{
-        const url = `http://localhost:5000/service/${serviceId}`;
-       // console.log(url);
-        fetch(url)
-        .then(res=>res.json())
-        .then(data =>setService(data));
-    }, [])
+    const [service]=useServiceDetail(serviceId);
+   
 
     return (
         <div className='w-96 mx-auto mt-16'>
@@ -20,7 +15,7 @@ const ServiceDetail = () => {
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{service.name}</h5>
            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{service.description}</p>
            <div className='text-center'>
-                <Link to="/checkout">
+                <Link to={`/checkout/${serviceId}`}>
                     <button className='btn btn-primary'>Proceed Checkout</button>
                 </Link>
             </div>
