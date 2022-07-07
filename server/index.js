@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
- const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const jwt = require('jsonwebtoken');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require ('dotenv').config();
 const port = process.env.PORT || 5000;
 
@@ -18,8 +19,17 @@ async function run (){
     try {
         await client.connect();
         const serviceCollection =client.db('car-services').collection('services');
+        const orderCollection =client.db('car-services').collection('order');
 
-        // TO LOAD ALL DATA
+        // AUTH TOKEN
+        app.post('/login', async(req,res)=>{
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRE,{expiresIn:'1d'});
+            res.send({accessToken});
+
+        })
+
+        // TO LOAD ALL DATA for services
         app.get ('/service', async(req,res)=>{
             const query={};
         const cursor =serviceCollection.find(query);
@@ -49,6 +59,25 @@ async function run (){
             const result= await serviceCollection.deleteOne(query);
             res.send(result);
         });
+
+        // ORDER COLLECTION api
+
+            // to load the orders in order page
+         app.get('/order', async(req,res)=>{
+             const email=req.query.email;
+            // console.log(email);
+            const query={email:email};
+            const cursor =orderCollection.find(query); // to load all
+            const orders =await cursor.toArray();
+            res.send(orders);
+            
+         })
+
+        app.post ('/order', async(req,res)=>{
+            const order=req.body;
+            const result = await orderCollection.insertOne(order);
+            res.send(result);
+        })
 
 
     }
