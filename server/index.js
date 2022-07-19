@@ -22,16 +22,17 @@ async function run (){
         const orderCollection =client.db('car-services').collection('order');
 
         // AUTH TOKEN
-        app.post('/login', async(req,res)=>{
+        app.post('/login', async (req, res) => {
             const user = req.body;
-            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRE,{expiresIn:'1d'});
-            res.send({accessToken});
-
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d'
+            });
+            res.send({ accessToken });
         })
 
         // TO LOAD ALL DATA for services
         app.get ('/service', async(req,res)=>{
-            const query={};
+        const query={};
         const cursor =serviceCollection.find(query);
         const services =await cursor.toArray();
         res.send(services);
