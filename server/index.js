@@ -22,9 +22,10 @@ function verifyJWT(req,res, next) {
         }
         console.log('DecodeD', decoded);
         req.decoded =decoded;
-    })
-    // console.log('inside Jwt verifies KORCHI',authHeader);
+         // console.log('inside Jwt verifies KORCHI',authHeader);
     next();
+    })
+   
 
 }
 
